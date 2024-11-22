@@ -599,77 +599,95 @@
             </div><!-- End Info Item -->
 
           </div>
-
-         <form action="https://api.web3forms.com/submit" method="POST" id="contactForm">
-          <div class="row gy-4">
-              <input type="hidden" name="access_key" value="28b75688-2099-48f0-9317-fb5875908dbb">
-              <input type="hidden" name="email" value="antonyglibindsilva28@gmail.com"> <!-- Your email to receive submissions -->
-      
-              <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required="">
-                  <span class="error-message" id="nameError"></span>
-              </div>
-      
-              <div class="col-md-6">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required="">
-                  <span class="error-message" id="emailError"></span>
-              </div>
-      
-              <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required="">
-                  <span class="error-message" id="subjectError"></span>
-              </div>
-      
-              <div class="col-md-12">
-                  <textarea class="form-control" name="message" id="message" rows="6" placeholder="Message" required=""></textarea>
-                  <span class="error-message" id="messageError"></span>
-              </div>
-      
-              <div class="col-md-12 text-center">
-                  <div id="loading" style="display:none;">Loading...</div>
-                  <div class="sent-message" id="successMessage" style="display:none;">Your message has been sent. Thank you!</div>
-                  <div id="errorMessage" class="error-message" style="display:none;">Error sending message.</div>
-                  <button class="btn btn-primary" type="submit" id="submitBtn">Send Message</button>
-              </div>
-          </div>
-      </form>
-      
-      <script>
-      document.getElementById("contactForm").addEventListener("submit", function(event) {
-          event.preventDefault(); // Prevent the form from submitting the traditional way
-          
-          document.getElementById("loading").style.display = "block"; // Show loading indicator
-      
-          // Create a FormData object to capture the form data
-          var formData = new FormData(this);
+          <form action="https://api.web3forms.com/submit" method="POST" id="contactForm">
+            <div class="row gy-4">
+                <input type="hidden" name="access_key" value="28b75688-2099-48f0-9317-fb5875908dbb">
+                <input type="hidden" name="email" value="antonyglibindsilva28@gmail.com"> <!-- Your email to receive submissions -->
         
-          // Send the form data using Fetch API
-          fetch('https://api.web3forms.com/submit', {
-              method: 'POST',
-              body: formData
-          })
-          .then(response => {
-              document.getElementById("loading").style.display = "none"; // Hide loading indicator
-              
-              if (response.ok) {
-                  // Display success message
-                  document.getElementById("successMessage").style.display = "block";
-                  document.getElementById("errorMessage").style.display = "none";
-                  this.reset(); // Clear form fields
-              } else {
-                  // Display error message for response issues
-                  document.getElementById("errorMessage").style.display = "block";
-              }
-          })
-          .catch(error => {
-              document.getElementById("loading").style.display = "none"; // Hide loading indicator
-              
-              // Display error message for network issues
-              document.getElementById("errorMessage").style.display = "block";
-              console.error("Error:", error); // Log detailed error to the console
-          });
-      });
-      </script>
+                <div class="col-md-6">
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Your name" pattern="[A-Za-z]+" required="">
+                    <span class="error-message" id="nameError" style="color: red; display: none;">Please enter a valid name (letters only).</span>
+                </div>
+        
+                <div class="col-md-6">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required="">
+                    <span class="error-message" id="emailError"></span>
+                </div>
+        
+                <div class="col-md-12">
+                    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required="">
+                    <span class="error-message" id="subjectError"></span>
+                </div>
+        
+                <div class="col-md-12">
+                    <textarea class="form-control" name="message" id="message" rows="6" placeholder="Message" required=""></textarea>
+                    <span class="error-message" id="messageError"></span>
+                </div>
+        
+                <div class="col-md-12 text-center">
+                    <div id="loading" style="display:none;">Loading...</div>
+                    <div class="sent-message" id="successMessage" style="display:none;">Your message has been sent. Thank you!</div>
+                    <div id="errorMessage" class="error-message" style="display:none;">Error sending message.</div>
+                    <button class="btn btn-primary" type="submit" id="submitBtn">Send Message</button>
+                </div>
+            </div>
+        </form>
+        
+        <script>
+        document.getElementById("contactForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+        
+            // Get the name field value
+            var name = document.getElementById("name").value;
+            
+            // Regex to allow only letters (A-Z, a-z) and spaces
+            var nameRegex = /^[A-Za-z\s]+$/;
+            var nameError = document.getElementById("nameError");
+        
+            // Validate the name input
+            if (!nameRegex.test(name)) {
+                // Show error message if the input doesn't match the regex
+                nameError.style.display = "block"; 
+                return; // Stop the form submission
+            } else {
+                // Hide error message if the input is valid
+                nameError.style.display = "none"; 
+            }
+        
+            // Show loading indicator
+            document.getElementById("loading").style.display = "block"; 
+        
+            // Create a FormData object to capture the form data
+            var formData = new FormData(this);
+        
+            // Send the form data using Fetch API
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                document.getElementById("loading").style.display = "none"; // Hide loading indicator
+        
+                if (response.ok) {
+                    // Display success message
+                    document.getElementById("successMessage").style.display = "block";
+                    document.getElementById("errorMessage").style.display = "none";
+                    this.reset(); // Clear form fields
+                } else {
+                    // Display error message for response issues
+                    document.getElementById("errorMessage").style.display = "block";
+                }
+            })
+            .catch(error => {
+                document.getElementById("loading").style.display = "none"; // Hide loading indicator
+        
+                // Display error message for network issues
+                document.getElementById("errorMessage").style.display = "block";
+                console.error("Error:", error); // Log detailed error to the console
+            });
+        });
+        </script>
+        
 
         </div>
 
